@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pagar Estacionamiento</title>
+<link rel="stylesheet" href="style.css">
+
+<!-- Librería QR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+
+<body>
+
+<header>
+Pago de Estacionamiento
+<nav>
+<a href="panel_usuario.html">Mi historial</a>
+<a onclick="logout()">Salir</a>
+</nav>
+</header>
+
+<main>
+
+<div class="panel">
+
+<h2>Pagar estacionamiento</h2>
+
+<input id="placa" placeholder="Placa del vehículo">
+<input id="horas" type="number" placeholder="Horas">
+
+<button onclick="pagar()">Pagar</button>
+
+<p id="estadoPago" style="color:red;">No pagado</p>
+
+<hr>
+
+<h3>Salida del estacionamiento</h3>
+
+<button onclick="generarQR()">Generar QR de salida</button>
+
+<div id="qr"></div>
+
+</div>
+
+</main>
+
+<script src="app.js"></script>
+
+<script>
+let pagado = false;
+
+function pagar() {
+    const placa = document.getElementById("placa").value;
+    const horas = document.getElementById("horas").value;
+
+    if (!placa || !horas) {
+        alert("Completa todos los campos");
+        return;
+    }
+
+    // Simulación de pago exitoso
+    pagado = true;
+
+    document.getElementById("estadoPago").innerText = "Pagado ✔";
+    document.getElementById("estadoPago").style.color = "green";
+
+    alert("Pago realizado con éxito");
+}
+
+function generarQR() {
+    const placa = document.getElementById("placa").value;
+
+    if (!placa) {
+        alert("Ingresa la placa primero");
+        return;
+    }
+
+    if (!pagado) {
+        alert("Debes pagar antes de generar el QR de salida");
+        return;
+    }
+
+    // Limpiar QR anterior
+    document.getElementById("qr").innerHTML = "";
+
+    const datos = "SALIDA|" + placa + "|" + new Date().toISOString();
+
+    new QRCode(document.getElementById("qr"), {
+        text: datos,
+        width: 200,
+        height: 200
+    });
+}
+</script>
+
+</body>
+</html>
