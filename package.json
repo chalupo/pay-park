@@ -1,0 +1,24 @@
+{
+  "name": "paypark",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chalupo/pay-park.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/chalupo/pay-park/issues"
+  },
+  "homepage": "https://github.com/chalupo/pay-park#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
