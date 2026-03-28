@@ -47,26 +47,6 @@ Pago de Estacionamiento
 <script src="app.js"></script>
 
 <script>
-let pagado = false;
-
-function pagar() {
-    const placa = document.getElementById("placa").value;
-    const horas = document.getElementById("horas").value;
-
-    if (!placa || !horas) {
-        alert("Completa todos los campos");
-        return;
-    }
-
-    // Simulación de pago exitoso
-    pagado = true;
-
-    document.getElementById("estadoPago").innerText = "Pagado ✔";
-    document.getElementById("estadoPago").style.color = "green";
-
-    alert("Pago realizado con éxito");
-}
-
 function generarQR() {
     const placa = document.getElementById("placa").value;
 
@@ -75,12 +55,13 @@ function generarQR() {
         return;
     }
 
-    if (!pagado) {
+    const pagoActual = localStorage.getItem("pagoActual");
+
+    if (!pagoActual) {
         alert("Debes pagar antes de generar el QR de salida");
         return;
     }
 
-    // Limpiar QR anterior
     document.getElementById("qr").innerHTML = "";
 
     const datos = "SALIDA|" + placa + "|" + new Date().toISOString();
