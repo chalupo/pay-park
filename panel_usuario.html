@@ -1,45 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Panel Usuario</title>
-<link rel="stylesheet" href="style.css">
+    <title>Panel de usuario</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body onload="cargarHistorial()">
 
-<header>
-Historial de pagos
-<nav>
-<a href="ventana-pago.html">Pagar</a>
-<a onclick="logout()">Salir</a>
-</nav>
-</header>
+    <header>
+        Panel de Usuario
+        <nav>
+            <a href="ventana-pago.html">Nuevo pago</a>
+            <a href="#" onclick="logout()">Salir</a>
+        </nav>
+    </header>
 
-<main>
+    <main>
+        <div class="panel">
+            <h2>Mi historial de pagos</h2>
 
-<div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Horas</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla"></tbody>
+            </table>
+        </div>
+    </main>
 
-<h2>Mis pagos</h2>
-
-<table>
-
-<thead>
-<tr>
-<th>Placa</th>
-<th>Horas</th>
-<th>Total</th>
-</tr>
-</thead>
-
-<tbody id="tabla"></tbody>
-
-</table>
-
-</div>
-
-</main>
-
-<script src="app.js"></script>
-
+    <script src="app.js"></script>
 </body>
 </html>
