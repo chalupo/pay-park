@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Panel Admin</title>
-<link rel="stylesheet" href="style.css">
+    <title>Panel de administración</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body onload="cargarAdmin()">
 
-<header>Panel Administrador</header>
+    <header>
+        Panel Administrador
+    </header>
 
-<main>
+    <main>
+        <div class="panel">
+            <h2>Todos los pagos</h2>
 
-<div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Placa</th>
+                        <th>Horas</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaAdmin"></tbody>
+            </table>
 
-<h2>Todos los pagos</h2>
+            <hr>
 
-<table>
+            <h2>Reporte administrativo</h2>
+            <p><strong>Total de pagos:</strong> <span id="totalPagos">0</span></p>
+            <p><strong>Total de ingresos:</strong> <span id="totalIngresos">$0</span></p>
+            <p><strong>Total de horas cobradas:</strong> <span id="totalHoras">0</span></p>
 
-<thead>
-<tr>
-<th>Usuario</th>
-<th>Placa</th>
-<th>Horas</th>
-<th>Total</th>
-</tr>
-</thead>
+            <h2>Estadísticas de ocupación</h2>
+            <p><strong>Cajones ocupados:</strong> <span id="ocupados">0</span></p>
+            <p><strong>Cajones disponibles:</strong> <span id="disponibles">0</span></p>
+            <p><strong>Porcentaje de ocupación:</strong> <span id="porcentajeOcupacion">0%</span></p>
+        </div>
+    </main>
 
-<tbody id="tablaAdmin"></tbody>
-
-</table>
-
-</div>
-
-</main>
-
-<script src="app.js"></script>
-
+    <script src="app.js"></script>
 </body>
 </html>
