@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>PayPark Login</title>
-<link rel="stylesheet" href="style.css">
+    <title>Iniciar sesión en PayPark</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <header>
+        PayPark
+        <nav>
+            <a href="registro.html">Registro</a>
+        </nav>
+    </header>
 
-<header>
-PayPark
-<nav>
-<a href="registro.html">Registro</a>
-</nav>
-</header>
+    <main>
+        <div class="panel">
+            <h2>Acceso</h2>
 
-<main>
+            <input id="email" type="email" placeholder="Correo">
+            <input id="password" type="password" placeholder="Contraseña">
 
-<div class="panel">
+            <button onclick="login()">Iniciar sesión</button>
+        </div>
+    </main>
 
-<h2>Login</h2>
-
-<input id="email" placeholder="Correo">
-<input type="password" id="password" placeholder="Contraseña">
-
-<button onclick="login()">Iniciar sesión</button>
-
-</div>
-
-</main>
-
-<script src="app.js"></script>
-
+    <script src="app.js"></script>
 </body>
 </html>
