@@ -1,128 +1,170 @@
 const precioHora = 20;
 
-function registrar(){
+function registrar() {
+    let email = document.getElementById("email").value;
+    let pass = document.getElementById("password").value;
 
-let email=document.getElementById("email").value;
-let pass=document.getElementById("password").value;
+    if (!email || !pass) {
+        alert("Completa todos los campos");
+        return;
+    }
 
-if(!email || !pass){
-alert("Completa todos los campos");
-return;
+    localStorage.setItem(email, pass);
+    alert("Usuario registrado correctamente");
+    window.location.href = "index.html";
 }
 
-localStorage.setItem(email,pass);
+function login() {
+    let email = document.getElementById("email").value;
+    let pass = document.getElementById("password").value;
 
-alert("Usuario registrado");
+    let saved = localStorage.getItem(email);
 
-window.location.href="index.html";
-
+    if (saved === pass) {
+        localStorage.setItem("usuarioActivo", email);
+        window.location.href = "ventana-pago.html";
+    } else {
+        alert("Datos incorrectos");
+    }
 }
 
-function login(){
+function pagar() {
+    let placa = document.getElementById("placa").value;
+    let horas = document.getElementById("horas").value;
 
-let email=document.getElementById("email").value;
-let pass=document.getElementById("password").value;
+    if (!placa || !horas) {
+        alert("Completa los datos");
+        return;
+    }
 
-let saved=localStorage.getItem(email);
+    let total = Number(horas) * precioHora;
+    let usuario = localStorage.getItem("usuarioActivo");
 
-if(saved===pass){
+    if (!usuario) {
+        alert("No hay un usuario activo");
+        window.location.href = "index.html";
+        return;
+    }
 
-localStorage.setItem("usuarioActivo",email);
+    let historial = JSON.parse(localStorage.getItem("pagos")) || [];
 
-window.location.href="ventana-pago.html";
+    let pago = {
+        usuario: usuario,
+        placa: placa,
+        horas: Number(horas),
+        total: total,
+        fecha: new Date().toLocaleString()
+    };
 
-}else{
+    historial.push(pago);
 
-alert("Datos incorrectos");
+    localStorage.setItem("pagos", JSON.stringify(historial));
+    localStorage.setItem("pagoActual", JSON.stringify(pago));
 
+    let estadoPago = document.getElementById("estadoPago");
+    if (estadoPago) {
+        estadoPago.innerText = "Pagado ✔";
+        estadoPago.style.color = "green";
+    }
+
+    alert("Pago realizado: $" + total);
 }
 
+function cargarHistorial() {
+    let usuario = localStorage.getItem("usuarioActivo");
+    let historial = JSON.parse(localStorage.getItem("pagos")) || [];
+    let tabla = document.getElementById("tabla");
+
+    if (!tabla) return;
+
+    tabla.innerHTML = "";
+
+    let pagosUsuario = historial.filter(p => p.usuario === usuario);
+
+    if (pagosUsuario.length === 0) {
+        tabla.innerHTML = `
+        <tr>
+            <td colspan="4">No hay pagos registrados</td>
+        </tr>
+        `;
+        return;
+    }
+
+    pagosUsuario.forEach(p => {
+        tabla.innerHTML += `
+        <tr>
+            <td>${p.placa}</td>
+            <td>${p.horas}</td>
+            <td>$${p.total}</td>
+            <td>${p.fecha}</td>
+        </tr>
+        `;
+    });
 }
 
-function pagar(){
+function cargarAdmin() {
+    let historial = JSON.parse(localStorage.getItem("pagos")) || [];
+    let tabla = document.getElementById("tablaAdmin");
 
-let placa=document.getElementById("placa").value;
-let horas=document.getElementById("horas").value;
+    if (!tabla) return;
 
-if(!placa || !horas){
-alert("Completa los datos");
-return;
+    tabla.innerHTML = "";
+
+    if (historial.length === 0) {
+        tabla.innerHTML = `
+        <tr>
+            <td colspan="5">No hay pagos registrados</td>
+        </tr>
+        `;
+    } else {
+        historial.forEach(p => {
+            tabla.innerHTML += `
+            <tr>
+                <td>${p.usuario}</td>
+                <td>${p.placa}</td>
+                <td>${p.horas}</td>
+                <td>$${p.total}</td>
+                <td>${p.fecha}</td>
+            </tr>
+            `;
+        });
+    }
+
+    generarReporteAdmin(historial);
 }
 
-let total=horas*precioHora;
+function generarReporteAdmin(historial) {
+    let totalPagos = historial.length;
+    let totalIngresos = 0;
+    let totalHoras = 0;
 
-let usuario=localStorage.getItem("usuarioActivo");
+    historial.forEach(p => {
+        totalIngresos += Number(p.total);
+        totalHoras += Number(p.horas);
+    });
 
-let historial=JSON.parse(localStorage.getItem("pagos")) || [];
+    let capacidadTotal = 50;
+    let ocupados = totalPagos;
+    let disponibles = capacidadTotal - ocupados;
 
-historial.push({
-usuario:usuario,
-placa:placa,
-horas:horas,
-total:total
-});
+    if (disponibles < 0) {
+        disponibles = 0;
+    }
 
-localStorage.setItem("pagos",JSON.stringify(historial));
+    let porcentaje = capacidadTotal > 0
+        ? ((ocupados / capacidadTotal) * 100).toFixed(2)
+        : 0;
 
-alert("Pago realizado: $"+total);
-
+    document.getElementById("totalPagos").innerText = totalPagos;
+    document.getElementById("totalIngresos").innerText = "$" + totalIngresos;
+    document.getElementById("totalHoras").innerText = totalHoras;
+    document.getElementById("ocupados").innerText = ocupados;
+    document.getElementById("disponibles").innerText = disponibles;
+    document.getElementById("porcentajeOcupacion").innerText = porcentaje + "%";
 }
 
-function cargarHistorial(){
-
-let usuario=localStorage.getItem("usuarioActivo");
-
-let historial=JSON.parse(localStorage.getItem("pagos")) || [];
-
-let tabla=document.getElementById("tabla");
-
-tabla.innerHTML="";
-
-historial.forEach(p=>{
-
-if(p.usuario===usuario){
-
-tabla.innerHTML+=`
-<tr>
-<td>${p.placa}</td>
-<td>${p.horas}</td>
-<td>$${p.total}</td>
-</tr>
-`;
-
-}
-
-});
-
-}
-
-function cargarAdmin(){
-
-let historial=JSON.parse(localStorage.getItem("pagos")) || [];
-
-let tabla=document.getElementById("tablaAdmin");
-
-tabla.innerHTML="";
-
-historial.forEach(p=>{
-
-tabla.innerHTML+=`
-<tr>
-<td>${p.usuario}</td>
-<td>${p.placa}</td>
-<td>${p.horas}</td>
-<td>$${p.total}</td>
-</tr>
-`;
-
-});
-
-}
-
-function logout(){
-
-localStorage.removeItem("usuarioActivo");
-
-window.location.href="index.html";
-
+function logout() {
+    localStorage.removeItem("usuarioActivo");
+    localStorage.removeItem("pagoActual");
+    window.location.href = "index.html";
 }
