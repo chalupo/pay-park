@@ -260,3 +260,70 @@ function eliminarPlacaAutorizada(placa) {
 
     localStorage.setItem("placasAutorizadas", JSON.stringify(placas));
 }
+
+function leerQR() {
+    let qr = localStorage.getItem("qrGenerado");
+
+    if (!qr) {
+        alert("No hay QR generado");
+        return;
+    }
+
+    procesarQR(qr);
+}
+
+function procesarQRManual() {
+    let qr = document.getElementById("qrManual").value;
+
+    if (!qr) {
+        alert("Ingresa el QR");
+        return;
+    }
+
+    procesarQR(qr);
+}
+
+function procesarQR(qrData) {
+    let resultado = document.getElementById("resultado");
+
+    let data;
+
+    try {
+        data = JSON.parse(qrData);
+    } catch (e) {
+        resultado.innerText = "❌ QR inválido";
+        resultado.style.color = "red";
+        return;
+    }
+
+    if (data.tipo !== "SALIDA") {
+        resultado.innerText = "❌ QR no válido para salida";
+        resultado.style.color = "red";
+        return;
+    }
+
+    let placa = data.placa;
+
+    let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
+
+    let registro = placas.find(p =>
+        p.placa.toLowerCase() === placa.toLowerCase()
+    );
+
+    if (!registro) {
+        resultado.innerText = "❌ Placa no encontrada";
+        resultado.style.color = "red";
+        return;
+    }
+
+    if (registro.estado !== "Pagado") {
+        resultado.innerText = "❌ Salida denegada: no ha pagado";
+        resultado.style.color = "red";
+        return;
+    }
+
+    eliminarPlacaAutorizada(placa);
+
+    resultado.innerText = "✅ Barrera abierta - salida permitida";
+    resultado.style.color = "green";
+}
