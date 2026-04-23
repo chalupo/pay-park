@@ -42,6 +42,8 @@ Pago de Estacionamiento
 <div id="qr"></div>
 
 </div>
+<p><strong>Datos del QR:</strong></p>
+<textarea id="qrTexto" rows="4" style="width:100%;"></textarea>
 
 </main>
 
@@ -56,22 +58,30 @@ function generarQR() {
         return;
     }
 
-    const pagoActual = localStorage.getItem("pagoActual");
+    const pagoActual = JSON.parse(localStorage.getItem("pagoActual"));
 
-    if (!pagoActual) {
+    if (!pagoActual || pagoActual.placa !== placa) {
         alert("Debes pagar antes de generar el QR de salida");
         return;
     }
 
     document.getElementById("qr").innerHTML = "";
 
-    const datos = "SALIDA|" + placa + "|" + new Date().toISOString();
+    const datos = JSON.stringify({
+        tipo: "SALIDA",
+        placa: placa,
+        fecha: new Date().toISOString()
+    });
 
     new QRCode(document.getElementById("qr"), {
         text: datos,
         width: 200,
         height: 200
     });
+
+    document.getElementById("qrTexto").value = datos;
+
+    localStorage.setItem("qrGenerado", datos);
 }
 </script>
 
