@@ -168,3 +168,53 @@ function logout() {
     localStorage.removeItem("pagoActual");
     window.location.href = "index.html";
 }
+
+function autorizarPlaca() {
+    let placa = document.getElementById("placaAdmin").value;
+
+    if (!placa) {
+        alert("Ingresa una placa");
+        return;
+    }
+
+    let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
+
+    if (placas.includes(placa)) {
+        alert("La placa ya está autorizada");
+        return;
+    }
+
+    placas.push(placa);
+
+    localStorage.setItem("placasAutorizadas", JSON.stringify(placas));
+
+    alert("Placa autorizada correctamente");
+
+    cargarPlacas();
+}
+
+function cargarPlacas() {
+    let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
+    let tabla = document.getElementById("tablaPlacas");
+
+    if (!tabla) return;
+
+    tabla.innerHTML = "";
+
+    if (placas.length === 0) {
+        tabla.innerHTML = `
+        <tr>
+            <td>No hay placas autorizadas</td>
+        </tr>
+        `;
+        return;
+    }
+
+    placas.forEach(p => {
+        tabla.innerHTML += `
+        <tr>
+            <td>${p}</td>
+        </tr>
+        `;
+    });
+}
