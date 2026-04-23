@@ -72,6 +72,8 @@ function pagar() {
         estadoPago.style.color = "green";
     }
 
+    marcarComoPagado(placa);
+
     alert("Pago realizado: $" + total);
 }
 
@@ -184,16 +186,19 @@ function autorizarPlaca() {
 
     let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
 
-    if (placas.includes(placa)) {
-        alert("La placa ya está autorizada");
+    if (placas.some(p => p.placa.toLowerCase() === placa.toLowerCase())) {
+        alert("La placa ya está registrada");
         return;
     }
 
-    placas.push(placa);
+    placas.push({
+        placa: placa,
+        estado: "No pagado"
+    });
 
     localStorage.setItem("placasAutorizadas", JSON.stringify(placas));
 
-    alert("Placa autorizada correctamente");
+    alert("Placa registrada correctamente");
 
     cargarPlacas();
 }
@@ -209,7 +214,7 @@ function cargarPlacas() {
     if (placas.length === 0) {
         tabla.innerHTML = `
         <tr>
-            <td>No hay placas autorizadas</td>
+            <td colspan="2">No hay placas registradas</td>
         </tr>
         `;
         return;
@@ -218,7 +223,8 @@ function cargarPlacas() {
     placas.forEach(p => {
         tabla.innerHTML += `
         <tr>
-            <td>${p}</td>
+            <td>${p.placa}</td>
+            <td>${p.estado}</td>
         </tr>
         `;
     });
@@ -226,5 +232,31 @@ function cargarPlacas() {
 
 function esPlacaAutorizada(placa) {
     let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
-    return placas.some(p => p.toLowerCase() === placa.toLowerCase());
+
+    return placas.some(p =>
+        p.placa.toLowerCase() === placa.toLowerCase()
+    );
+}
+
+function marcarComoPagado(placa) {
+    let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
+
+    placas = placas.map(p => {
+        if (p.placa.toLowerCase() === placa.toLowerCase()) {
+            return { ...p, estado: "Pagado" };
+        }
+        return p;
+    });
+
+    localStorage.setItem("placasAutorizadas", JSON.stringify(placas));
+}
+
+function eliminarPlacaAutorizada(placa) {
+    let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
+
+    placas = placas.filter(p =>
+        p.placa.toLowerCase() !== placa.toLowerCase()
+    );
+
+    localStorage.setItem("placasAutorizadas", JSON.stringify(placas));
 }
