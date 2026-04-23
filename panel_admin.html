@@ -45,6 +45,25 @@
             <p><strong>Cajones ocupados:</strong> <span id="ocupados">0</span></p>
             <p><strong>Cajones disponibles:</strong> <span id="disponibles">0</span></p>
             <p><strong>Porcentaje de ocupación:</strong> <span id="porcentajeOcupacion">0%</span></p>
+
+            <hr>
+
+            <h2>Control de placas autorizadas</h2>
+
+            <input type="text" id="placaAdmin" placeholder="Ingresa placa">
+            <button onclick="autorizarPlaca()">Autorizar placa</button>
+
+            <br><br>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Placa autorizada</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaPlacas"></tbody>
+            </table>
+
         </div>
     </main>
 
