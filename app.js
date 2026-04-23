@@ -37,6 +37,11 @@ function pagar() {
         return;
     }
 
+    if (!esPlacaAutorizada(placa)) {
+        alert("Placa NO autorizada ❌");
+        return;
+    }
+
     let total = Number(horas) * precioHora;
     let usuario = localStorage.getItem("usuarioActivo");
 
@@ -217,4 +222,9 @@ function cargarPlacas() {
         </tr>
         `;
     });
+}
+
+function esPlacaAutorizada(placa) {
+    let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
+    return placas.some(p => p.toLowerCase() === placa.toLowerCase());
 }
