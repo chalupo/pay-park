@@ -340,4 +340,32 @@ function migrarDatos() {
     localStorage.setItem("versionSistema", "2");
 }
 
+function actualizarDashboardInicio() {
+    const capacidadTotal = 120;
+
+    let placas = JSON.parse(localStorage.getItem("placasAutorizadas")) || [];
+
+    // Compatibilidad con datos viejos
+    placas = placas.map(p => {
+        if (typeof p === "string") {
+            return { placa: p, estado: "No pagado" };
+        }
+        return p;
+    });
+
+    // Guardar normalizado por si había datos viejos
+    localStorage.setItem("placasAutorizadas", JSON.stringify(placas));
+
+    const ocupados = placas.length;
+    const disponibles = capacidadTotal - ocupados;
+
+    const totalAutos = document.getElementById("totalAutos");
+    const ocupadosInicio = document.getElementById("ocupadosInicio");
+    const cajonesDisponibles = document.getElementById("cajonesDisponibles");
+
+    if (totalAutos) totalAutos.innerText = capacidadTotal;
+    if (ocupadosInicio) ocupadosInicio.innerText = ocupados;
+    if (cajonesDisponibles) cajonesDisponibles.innerText = disponibles;
+}
+
 migrarDatos();
