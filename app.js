@@ -327,3 +327,17 @@ function procesarQR(qrData) {
     resultado.innerText = "✅ Barrera abierta - salida permitida";
     resultado.style.color = "green";
 }
+
+function migrarDatos() {
+    const version = localStorage.getItem("versionSistema");
+
+    if (version === "2") return;
+
+    localStorage.removeItem("placasAutorizadas");
+
+    localStorage.removeItem("qrGenerado");
+
+    localStorage.setItem("versionSistema", "2");
+}
+
+migrarDatos();
